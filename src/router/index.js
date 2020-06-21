@@ -4,7 +4,13 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 export default new Router({
+    mode:'history',
     routes: [
+        {
+            path: '/ssologin',
+            component: () => import(/* webpackChunkName: "login" */ '../components/page/ssologin.vue'),
+            meta: { title: '单点登录跳转' }
+        },
         {
             path: '/',
             redirect: '/dashboard'

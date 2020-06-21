@@ -5,7 +5,7 @@
             <i v-if="!collapse" class="el-icon-s-fold"></i>
             <i v-else class="el-icon-s-unfold"></i>
         </div>
-        <div class="logo">后台管理系统</div>
+        <div class="logo">FTBook个人空间</div>
         <div class="header-right">
             <div class="header-user-con">
                 <!-- 全屏显示 -->
@@ -29,17 +29,17 @@
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                    <img src="../../assets/img/img.jpg" />
+                     <img :src= user.avatar_url class="user-avator" alt />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{username}}
+                        {{user.name}}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a href="https://github.com/lin-xin/vue-manage-system" target="_blank">
-                            <el-dropdown-item>项目仓库</el-dropdown-item>
+                        <a :href= user.url target="_blank">
+                            <el-dropdown-item>个人git仓库</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
                     </el-dropdown-menu>
@@ -55,8 +55,13 @@ export default {
         return {
             collapse: false,
             fullscreen: false,
-            name: 'linxin',
-            message: 2
+            message: 2,
+            user:{
+                id:"",
+                login:"",
+                name:"",
+                avatar_url:"",
+            }
         };
     },
     computed: {
@@ -69,8 +74,8 @@ export default {
         // 用户名下拉菜单选择事件
         handleCommand(command) {
             if (command == 'loginout') {
-                localStorage.removeItem('ms_username');
-                this.$router.push('/login');
+                this.$token.deleteToken();
+                this.$login.logout(this);
             }
         },
         // 侧边栏折叠
@@ -105,6 +110,11 @@ export default {
             }
             this.fullscreen = !this.fullscreen;
         }
+    },
+    created(){
+        bus.$on('user', msg => {
+            this.user = msg;
+        });
     },
     mounted() {
         if (document.body.clientWidth < 1500) {

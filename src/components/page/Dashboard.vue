@@ -3,10 +3,13 @@
         <el-row :gutter="20">
             <el-col :span="8">
                 <el-card shadow="hover" class="mgb20" style="height:252px;">
+                    <div class="user-bio">
+                            <span>{{user.bio}}</span>
+                        </div>
                     <div class="user-info">
-                        <img src="../../assets/img/img.jpg" class="user-avator" alt />
+                        <img :src= user.avatar_url class="user-avator" alt />
                         <div class="user-info-cont">
-                            <div class="user-info-name">{{name}}</div>
+                            <div class="user-info-name">{{user.name}}</div>
                             <div>{{role}}</div>
                         </div>
                     </div>
@@ -116,7 +119,12 @@ export default {
     name: 'dashboard',
     data() {
         return {
-            name: localStorage.getItem('ms_username'),
+            user:{
+                id:"",
+                login:"",
+                name:"",
+                avatar_url:"",
+            },
             todoList: [
                 {
                     title: '今天要修复100个bug',
@@ -237,7 +245,9 @@ export default {
     //     window.removeEventListener('resize', this.renderChart);
     //     bus.$off('collapse', this.handleBus);
     // },
+
     methods: {
+       
         changeDate() {
             const now = new Date().getTime();
             this.data.forEach((item, index) => {
@@ -259,6 +269,11 @@ export default {
         //     this.$refs.bar.renderChart();
         //     this.$refs.line.renderChart();
         // }
+    },
+    created(){
+         bus.$on('user', msg => {
+            this.user = msg;
+        });
     }
 };
 </script>
@@ -332,6 +347,14 @@ export default {
     width: 120px;
     height: 120px;
     border-radius: 50%;
+}
+.user-bio{
+    width: 100%;
+    margin: 0px;
+    text-align: right;
+    font-size: 0.5em;
+    line-height: 1em;
+    color: #7b9985;
 }
 
 .user-info-cont {

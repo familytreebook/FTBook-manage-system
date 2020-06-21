@@ -1,28 +1,16 @@
 <template>
     <div class="login-wrap">
         <div class="ms-login">
-            <div class="ms-title">FamilyBook后台管理系统</div>
-            <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
-                <el-form-item prop="username">
-                    <el-input v-model="param.username" placeholder="username">
-                        <el-button slot="prepend" icon="el-icon-lx-people"></el-button>
-                    </el-input>
-                </el-form-item>
-                <el-form-item prop="password">
-                    <el-input
-                        type="password"
-                        placeholder="password"
-                        v-model="param.password"
-                        @keyup.enter.native="submitForm()"
-                    >
-                        <el-button slot="prepend" icon="el-icon-lx-lock"></el-button>
-                    </el-input>
-                </el-form-item>
+            <div class="ms-title">FamilyTreeBook</div>         
                 <div class="login-btn">
-                    <el-button type="primary" @click="submitForm()">登录</el-button>
+                      <div>
+                            <p class="login-tips">GitHub登录</p>
+                            <h1 v-show="!islogin">尚未登录</h1>
+                            <button @click="login" v-show="!islogin"  style="cursor:pointer">登录</button>
+                            <h1 v-show="islogin">已登录</h1>
+                            <button @click="logout" v-show="islogin"  style="cursor:pointer">注销</button>
+                        </div>
                 </div>
-                <p class="login-tips">Tips : 输入用户名和密码。</p>
-            </el-form>
         </div>
     </div>
 </template>
@@ -31,6 +19,7 @@
 export default {
     data: function() {
         return {
+            islogin: false,
             param: {
                 username: 'admin',
                 password: '123123',
@@ -42,20 +31,19 @@ export default {
         };
     },
     methods: {
-        submitForm() {
-            this.$refs.login.validate(valid => {
-                if (valid) {
-                    this.$message.success('登录成功');
-                    localStorage.setItem('ms_username', this.param.username);
-                    this.$router.push('/');
-                } else {
-                    this.$message.error('请输入账号和密码');
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
+        checkLogin:function(){
+            return this.$login.checkLogin(this);
         },
+        login:function(){
+            this.$login.login(this);
+        },
+        logout:function () {
+            this.$login.logout(this,"http://localhost:8080"+"/");
+        }
     },
+    mounted:function () {
+        this.islogin = this.checkLogin();
+    }
 };
 </script>
 

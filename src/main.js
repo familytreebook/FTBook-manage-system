@@ -1,6 +1,12 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
+import axios from 'axios'
+import config from './config/config.js'
+import token from './utils/token.js'
+import login from './utils/loginUtil.js'
+import querystring from 'querystring'
+
 import ElementUI from 'element-ui';
 import VueI18n from 'vue-i18n';
 import { messages } from './components/common/i18n';
@@ -10,7 +16,14 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = false
+Vue.prototype.$ajax = axios;
+Vue.prototype.$config = config;
+Vue.prototype.$token = token;
+Vue.prototype.$login = login;
+Vue.prototype.$querystring = querystring;
+axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8';
+
 Vue.use(VueI18n);
 Vue.use(ElementUI, {
     size: 'small'
@@ -23,8 +36,9 @@ const i18n = new VueI18n({
 //使用钩子函数对路由进行权限跳转
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | vue-manage-system`;
-    const role = localStorage.getItem('ms_username');
-    if (!role && to.path !== '/login') {
+    const role = sessionStorage.getItem('user_role');
+    const accessToken = sessionStorage.getItem('access_token');
+    if (!accessToken && to.path !== '/login' && to.path !== '/ssologin') {
         next('/login');
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已

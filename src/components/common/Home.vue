@@ -28,6 +28,36 @@ export default {
             collapse: false
         };
     },
+    methods:{
+         checkLogin:function(){
+            return this.$login.checkLogin(this);
+        },
+        login:function(){
+            return this.$login.login(this);
+        },
+        logout:function () {
+            this.$token.deleteToken();
+            this.$login.logout(this,"http://localhost:8080"+"/");
+        },
+        // res:function () {
+        //     this.$router.push('/res')
+        // },
+        getUserInfo:function () {
+            var tokenInfo = this.$token.loadToken();
+            this.$ajax({
+                url:this.$config.userInfoUri+"?"+"access_token="+tokenInfo.access_token,
+                headers:{"Accept":"application/json"}
+            })
+            .then((response) =>{
+                this.user = response.data;
+                console.log(this.user);
+                bus.$emit("user",this.user);
+            })
+            .catch((error) =>{
+                this.$root.push("/logout")
+            });
+        }
+    },
     components: {
         vHead,
         vSidebar,
@@ -46,6 +76,13 @@ export default {
             }
             this.tagsList = arr;
         });
+    },  
+    mounted:function () {
+        if(this.checkLogin()){
+            this.getUserInfo();
+        }else {
+            this.login();
+        }
     }
 };
 </script>
