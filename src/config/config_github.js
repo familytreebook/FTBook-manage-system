@@ -1,13 +1,11 @@
 var config={
-  baseOAuthUrl:"http://localhost:8104/auth/",
+  baseOAuthUrl:"https://github.com/",
   //请求授权地址
-  userAuthorizationUri:"http://localhost:8104/auth/oauth/authorize",
+  userAuthorizationUri:"https://github.com/login/oauth/authorize",
   //accessToken请求地址
-  accessTokenUri : "/platform/user/getToken",
-
-  getTokenUri:"http://localhost:8199/platform/user/getToken",
+  accessTokenUri : "/github/login/oauth/access_token",
   //用户信息请求地址
-  userInfoUri:"http://localhost:8104/auth/user/current",
+  userInfoUri:"https://api.github.com/user",
   //登出请求地址
   logoutUri:"https://github.com/logout",
   //项目地址
@@ -17,14 +15,14 @@ var config={
   //案例资源服务器地址
   resUri:"http://localhost:8080",
   //客户端相关标识，请从认证服务器申请
-  clientId: "ftbook",
-  client_secret:"123456",
+  clientId: "47d81577db725509c665",
+  client_secret:"a77fbaa07143db00a0f50438d05b1dd74b9449bf",
   //申请的权限范围
-  scope:"all",
+  scope:"read:user",
   //可选参数，客户端的当前状态，可以指定任意值，用于校验，此次案例不做相关认证
   state:"w",
   //一些固定的请求参数
-  response_type:"code",
+  response_type:"token",
   grant_type : "authorization_code",
   code:"",
 }

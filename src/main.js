@@ -23,6 +23,20 @@ Vue.prototype.$token = token;
 Vue.prototype.$login = login;
 Vue.prototype.$querystring = querystring;
 axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8';
+axios.interceptors.request.use(
+    config => {
+    // 判断是否存在token，如果存在的话，则每个http header都加上token
+      let tokenInfo = token.loadToken()
+
+      if (!config.headers.hasOwnProperty('Authorization') && tokenInfo && tokenInfo.access_token) {
+        config.headers.Authorization = "Bearer "+tokenInfo.access_token;
+        console.log(config.headers);
+      }
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    });
 
 Vue.use(VueI18n);
 Vue.use(ElementUI, {

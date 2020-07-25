@@ -7,9 +7,9 @@
                             <span>{{user.bio}}</span>
                         </div>
                     <div class="user-info">
-                        <img :src= user.avatar_url class="user-avator" alt />
+                        <img :src= user.avatar class="user-avator" alt />
                         <div class="user-info-cont">
-                            <div class="user-info-name">{{user.name}}</div>
+                            <div class="user-info-name">{{user.nickname}}</div>
                             <div>{{role}}</div>
                         </div>
                     </div>
@@ -122,8 +122,8 @@ export default {
             user:{
                 id:"",
                 login:"",
-                name:"",
-                avatar_url:"",
+                nickname:"",
+                avatar:"",
             },
             todoList: [
                 {
@@ -273,6 +273,7 @@ export default {
     created(){
          bus.$on('user', msg => {
             this.user = msg;
+            console.info(msg);
         });
     }
 };

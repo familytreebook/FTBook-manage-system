@@ -42,12 +42,12 @@ export default {
         // res:function () {
         //     this.$router.push('/res')
         // },
-        getUserInfo:function () {
-            var tokenInfo = this.$token.loadToken();
-            this.$ajax({
-                url:this.$config.userInfoUri+"?"+"access_token="+tokenInfo.access_token,
-                headers:{"Accept":"application/json"}
-            })
+        getUserInfo:function () {//+"?"+"access_token="+tokenInfo.access_token
+            //var tokenInfo = this.$token.loadToken();
+            //let tokenInfo = token.loadToken()
+            this.$ajax.post(this.$config.userInfoUri,{},{
+                    //headers:{'Authorization':"Bearer "+tokenInfo.access_token}
+                })
             .then((response) =>{
                 this.user = response.data;
                 console.log(this.user);

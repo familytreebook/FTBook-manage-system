@@ -1,11 +1,13 @@
 var token={
   savetoken :function (token) {
+    if(!token||!token.access_token){
+        return;
+    }
     sessionStorage.setItem("access_token",token.access_token);
-    sessionStorage.setItem("enabled",token.enabled);
     sessionStorage.setItem("expires_in",token.expires_in);
     sessionStorage.setItem("refresh_token",token.refresh_token);
     sessionStorage.setItem("token_type",token.token_type);
-    sessionStorage.setItem("scope",token.token_type);
+    sessionStorage.setItem("scope",token.scope);
   },
   deleteToken:function () {
     sessionStorage.setItem("access_token",null);
@@ -25,14 +27,14 @@ var token={
   },
   getTokenFromService:function (vue,code,callback,error) {
     debugger;
-    vue.$ajax.post(vue.$config.accessTokenUri,{
-      client_id:vue.$config.clientId, 
-      client_secret:vue.$config.client_secret,
-      code:code,
-      redirect_uri:vue.$config.redirect_uri,
-      grant_type:vue.$config.grant_type
-    },{
-      headers:{"Accept":"application/json"}
+    vue.$ajax.get(vue.$config.getTokenUri,{
+      params:{
+        client_id:vue.$config.clientId, 
+        code:code,
+        redirect_uri:vue.$config.redirect_uri,
+        grant_type:vue.$config.grant_type,
+        scope:vue.$config.scope
+      }      
     })
       .then(callback)
       .catch(error);

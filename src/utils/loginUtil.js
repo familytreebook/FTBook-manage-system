@@ -8,7 +8,7 @@ var loginUtil ={
       client_id:vue.$config.clientId,
       response_type:vue.$config.response_type,
       scope:vue.$config.scope,
-      state:vue.$config.state,
+      //state:vue.$config.state,
       redirect_uri:vue.$config.redirect_uri, 
     }))
     window.location.href = authorUrl;
