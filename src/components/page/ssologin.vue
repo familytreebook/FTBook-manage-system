@@ -14,6 +14,7 @@ export default {
   },
   methods:{
     getToken:function(){
+      alert(123)
       this.$token.getTokenFromService(this,this.code,(response)=>{
         debugger;
         this.$token.savetoken(response.data);

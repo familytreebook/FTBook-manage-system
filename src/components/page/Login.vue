@@ -9,6 +9,7 @@
                             <button @click="login" v-show="!islogin"  style="cursor:pointer">登录</button>
                             <h1 v-show="islogin">已登录</h1>
                             <button @click="logout" v-show="islogin"  style="cursor:pointer">注销</button>
+                            <button @click="getUserInfo"   style="cursor:pointer">用户信息</button>
                         </div>
                 </div>
         </div>
@@ -36,6 +37,9 @@ export default {
         },
         login:function(){
             this.$login.login(this);
+        },
+        getUserInfo:function(){
+            this.$login.getUserInfo(this);
         },
         logout:function () {
             this.$login.logout(this,"http://localhost:8080"+"/");

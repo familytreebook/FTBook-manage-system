@@ -23,6 +23,7 @@ Vue.prototype.$token = token;
 Vue.prototype.$login = login;
 Vue.prototype.$querystring = querystring;
 axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8';
+axios.defaults.withCredentials = true;
 axios.interceptors.request.use(
     config => {
     // 判断是否存在token，如果存在的话，则每个http header都加上token
