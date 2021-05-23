@@ -7,15 +7,6 @@ export default new Router({
     mode:'history',
     routes: [
         {
-            path: '/ssologin',
-            component: () => import(/* webpackChunkName: "login" */ '../components/page/ssologin.vue'),
-            meta: { title: '单点登录跳转' }
-        },
-        {
-            path: '/',
-            redirect: '/dashboard'
-        },
-        {
             path: '/',
             component: () => import(/* webpackChunkName: "home" */ '../components/common/Home.vue'),
             meta: { title: '自述文件' },

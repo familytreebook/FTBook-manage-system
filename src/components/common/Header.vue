@@ -29,16 +29,16 @@
                 </div>
                 <!-- 用户头像 -->
                 <div class="user-avator">
-                     <img :src= user.avatar_url class="user-avator" alt />
+                     <img :src= currentUserProfile.avatar class="user-avator" alt />
                 </div>
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{user.name}}
+                        {{currentUserProfile.nickname}}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <a :href= user.url target="_blank">
+                        <a :href= currentUserProfile.url target="_blank">
                             <el-dropdown-item>个人git仓库</el-dropdown-item>
                         </a>
                         <el-dropdown-item divided command="loginout">退出登录</el-dropdown-item>
@@ -49,26 +49,28 @@
     </div>
 </template>
 <script>
-import bus from '../common/bus';
+//import bus from '../common/bus';
+import { mapState } from 'vuex'
 export default {
     data() {
         return {
             collapse: false,
             fullscreen: false,
-            message: 2,
-            user:{
-                id:"",
-                login:"",
-                name:"",
-                avatar_url:"",
-            }
+            message: 2
+            // isLogin:false,
+            // currentUserProfile:{
+            //     id:"",
+            //     login:"",
+            //     nickname:"",
+            //     avatar:"",
+            // }
         };
     },
-    computed: {
-        username() {
-            let username = localStorage.getItem('ms_username');
-            return username ? username : this.name;
-        }
+      computed: {
+        ...mapState({
+            currentUserProfile: state => state.user.currentUserProfile,
+            isLogin: state => state.user.isLogin
+        })
     },
     methods: {
         // 用户名下拉菜单选择事件
@@ -81,7 +83,7 @@ export default {
         // 侧边栏折叠
         collapseChage() {
             this.collapse = !this.collapse;
-            bus.$emit('collapse', this.collapse);
+            //bus.$emit('collapse', this.collapse);
         },
         // 全屏事件
         handleFullScreen() {
@@ -112,9 +114,9 @@ export default {
         }
     },
     created(){
-        bus.$on('user', msg => {
-            this.user = msg;
-        });
+        // bus.$on('user', msg => {
+        //     this.user = msg;
+        // });
     },
     mounted() {
         if (document.body.clientWidth < 1500) {

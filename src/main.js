@@ -3,9 +3,10 @@ import App from './App.vue';
 import router from './router';
 import axios from 'axios'
 import config from './config/config.js'
-import token from './utils/token.js'
-import login from './utils/loginUtil.js'
+import token from './utils/token'
+import login from './utils/loginUtil'
 import querystring from 'querystring'
+import store from './store/index'
 
 import ElementUI from 'element-ui';
 import VueI18n from 'vue-i18n';
@@ -16,6 +17,9 @@ import './assets/css/icon.css';
 import './components/common/directives';
 import 'babel-polyfill';
 
+window.store = store
+//Vue.prototype.$bus = new Vue() // event Bus 用于无关系组件间的通信。
+Vue.prototype.$store = store
 Vue.config.productionTip = false
 Vue.prototype.$ajax = axios;
 Vue.prototype.$config = config;
@@ -26,11 +30,14 @@ axios.defaults.headers.common['Content-Type'] = 'application/json;charset=UTF-8'
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use(
     config => {
-    // 判断是否存在token，如果存在的话，则每个http header都加上token
+        config.headers["X-Requested-With"]="XMLHttpRequest";
+        //config.headers["Accept"]="application/json";
+
+        // 判断是否存在token，如果存在的话，则每个http header都加上token
       let tokenInfo = token.loadToken()
 
-      if (!config.headers.hasOwnProperty('Authorization') && tokenInfo && tokenInfo.access_token) {
-        config.headers.Authorization = "Bearer "+tokenInfo.access_token;
+      if (!config.headers.hasOwnProperty('Authorization') && tokenInfo && tokenInfo.tokenValue) {
+        config.headers.Authorization = /*tokenInfo.tokenType+*/"Bearer "+tokenInfo.tokenValue;
         console.log(config.headers);
       }
       return config;
@@ -52,8 +59,8 @@ const i18n = new VueI18n({
 router.beforeEach((to, from, next) => {
     document.title = `${to.meta.title} | vue-manage-system`;
     const role = sessionStorage.getItem('user_role');
-    const accessToken = sessionStorage.getItem('access_token');
-    if (!accessToken && to.path !== '/login' && to.path !== '/ssologin') {
+    const accessToken = sessionStorage.getItem('tokenValue');
+    if (!accessToken && to.path !== '/login') {
         next('/login');
     } else if (to.meta.permission) {
         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已

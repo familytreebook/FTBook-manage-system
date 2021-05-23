@@ -1,10 +1,11 @@
 var config={
+  webbaseUrl:"http://localhost:8080/weblogin",
+  baseUrl:"http://localhost:8080/apis",
   apiGateWayUrl:"http://localhost:8103",
-  accessTokenUri : "/platform/user/getResourcesList",
   loginUrl:"/platform/user/login",
-  getTokenUri:"/platform/user/getResourcesList",
-  //用户信息请求地址
-  userInfoUri:"http://localhost:8103/auth-service/auth/user/current",
+  getTokenUri:"/platform/user/getToken",
+  getResourceListUri : "/platform/user/getResourceList",
+  getUserInfoUri:"/platform/user/getUserInfo"
 }
 
 export default config;

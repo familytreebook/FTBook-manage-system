@@ -114,7 +114,6 @@
 
 <script>
 import Schart from 'vue-schart';
-import bus from '../common/bus';
 export default {
     name: 'dashboard',
     data() {
@@ -271,10 +270,12 @@ export default {
         // }
     },
     created(){
-         bus.$on('user', msg => {
-            this.user = msg;
-            console.info(msg);
-        });
+        
+
+        //  bus.$on('user', msg => {
+        //     this.user = msg;
+        //     console.info(msg);
+        // });
     }
 };
 </script>

@@ -8,8 +8,6 @@
                             <h1 v-show="!islogin">尚未登录</h1>
                             <button @click="login" v-show="!islogin"  style="cursor:pointer">登录</button>
                             <h1 v-show="islogin">已登录</h1>
-                            <button @click="logout" v-show="islogin"  style="cursor:pointer">注销</button>
-                            <button @click="getUserInfo"   style="cursor:pointer">用户信息</button>
                         </div>
                 </div>
         </div>
@@ -33,20 +31,39 @@ export default {
     },
     methods: {
         checkLogin:function(){
-            return this.$login.checkLogin(this);
+            this.islogin = this.$login.checkLogin(this);
+            return this.islogin;
         },
         login:function(){
             this.$login.login(this);
         },
-        getUserInfo:function(){
-            this.$login.getUserInfo(this);
+        successCallback:function(){
+            this.checkLogin();
+            this.$message.success('登录成功');
+            this.$router.push('/dashboard');
         },
-        logout:function () {
-            this.$login.logout(this,"http://localhost:8080"+"/");
+        errorCallback:function(){
+            this.checkLogin();
+        },
+        getToken:function(){
+            this.$login.getToken(this,this.successCallback,this.errorCallback);
         }
+        // ,
+        // logout:function () {
+        //     this.$login.logout(this,"http://localhost:8080"+"/");
+        // }
     },
     mounted:function () {
-        this.islogin = this.checkLogin();
+        console.log("mounted")
+        
+        if(!this.checkLogin()){
+            this.getToken();
+        }else{
+            this.successCallback();
+        }
+        
+        
+        console.log(this.islogin)
     }
 };
 </script>
