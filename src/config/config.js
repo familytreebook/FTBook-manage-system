@@ -5,7 +5,8 @@ var config={
   loginUrl:"/platform/user/login",
   getTokenUri:"/platform/user/getToken",
   getResourceListUri : "/platform/user/getResourceList",
-  getUserInfoUri:"/platform/user/getUserInfo"
+  getUserInfoUri:"/platform/user/getUserInfo",
+  getUserListUri:"/platform/admin/getUserList"
 }
 
 export default config;

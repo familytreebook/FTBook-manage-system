@@ -17,6 +17,11 @@ export default new Router({
                     meta: { title: '系统首页' }
                 },
                 {
+                    path: '/user-list',
+                    component: () => import(/* webpackChunkName: "table" */ '../components/page/user/user-list.vue'),
+                    meta: { title: '用户管理' }
+                },
+                {
                     path: '/icon',
                     component: () => import(/* webpackChunkName: "icon" */ '../components/page/Icon.vue'),
                     meta: { title: '自定义图标' }
