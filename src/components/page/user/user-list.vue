@@ -1,96 +1,93 @@
 <template>
-    <div>
-        <div class="crumbs">
-            <el-breadcrumb separator="/">
-                <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 用户管理
-                </el-breadcrumb-item>
-            </el-breadcrumb>
+    <div class="container">
+        <div class="handle-box">
+            <el-button
+                type="primary"
+                icon="el-icon-lx-friendaddfill"
+                class="handle-del mr10"
+                @click="addUser"
+            >添加</el-button>
+             状态：<el-select v-model="query.userstatus" value-key="code" placeholder="状态" class="handle-select mr10">
+                <el-option key="" label="全部" value=""></el-option>
+                <el-option
+                v-for="item in userStatusData"
+                :key="item.code"
+                :label="item.name"
+                :value="item.code">
+                </el-option>
+            </el-select>
+             性别：<el-select v-model="query.sex" placeholder="性别" class="handle-select mr10">
+                <el-option key="" label="全部" value=""></el-option>
+                <el-option key="1" label="男" value="1"></el-option>
+                <el-option key="0" label="女" value="0"></el-option>
+                <el-option key="3" label="未知" value="3"></el-option>               
+            </el-select>
+            <el-input v-model="query.usernameLikeLeft" placeholder="账号" class="handle-input mr10"></el-input>
+            <el-input v-model="query.nicknameLikeLeft" placeholder="用户名" class="handle-input mr10"></el-input>
+            <el-input v-model="query.phoneLikeLeft" placeholder="手机号" class="handle-input mr10"></el-input>
+            <el-input v-model="query.emailLikeLeft" placeholder="邮箱" class="handle-input mr10"></el-input>
+            <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
         </div>
-        <div class="container">
-            <div class="handle-box">
-                <el-button
-                    type="primary"
-                    icon="el-icon-delete"
-                    class="handle-del mr10"
-                    @click="delAllSelection"
-                >批量删除</el-button>
-                <el-select v-model="query.address" placeholder="地址" class="handle-select mr10">
-                    <el-option key="1" label="广东省" value="广东省"></el-option>
-                    <el-option key="2" label="湖南省" value="湖南省"></el-option>
-                </el-select>
-                <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
-                <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
-            </div>
-            <el-table
-                :data="tableData"
-                border
-                class="table"
-                ref="multipleTable"
-                header-cell-class-name="table-header"
-                @selection-change="handleSelectionChange"
-            >
-                <el-table-column type="selection" width="55" align="center"></el-table-column>
-                <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column prop="username" label="账号"></el-table-column>
-                <el-table-column prop="nickname" label="用户名"></el-table-column>
-                <el-table-column prop="phone" label="手机号"></el-table-column>
-                <el-table-column prop="email" label="邮箱"></el-table-column>
-                <el-table-column label="性别" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                            :type="scope.row.sex===1?'男':'女'"
-                        >{{scope.row.sex===1?'男':'女'}}</el-tag>
-                    </template>
-                </el-table-column>
-                <el-table-column label="头像(查看大图)" align="center">
-                    <template slot-scope="scope">
-                        <el-image
-                            class="table-td-thumb"
-                            :src="scope.row.avatar"
-                            :preview-src-list="[scope.row.avatar]"
-                        ></el-image>
-                    </template>
-                </el-table-column>
-                <el-table-column label="账户余额">
-                    <template slot-scope="scope">￥{{scope.row.money}}</template>
-                </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column label="状态" align="center">
-                    <template slot-scope="scope">
-                        <el-tag
-                            :type="scope.row.enabled?'启用':'禁用'"
-                        >{{scope.row.enabled?'启用':'禁用'}}</el-tag>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="regtime" label="注册时间"></el-table-column>
-                <el-table-column label="操作" width="180" align="center">
-                    <template slot-scope="scope">
-                        <el-button
-                            type="text"
-                            icon="el-icon-edit"
-                            @click="handleEdit(scope.$index, scope.row)"
-                        >编辑</el-button>
-                        <el-button
-                            type="text"
-                            icon="el-icon-delete"
-                            class="red"
-                            @click="handleDelete(scope.$index, scope.row)"
-                        >删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <div class="pagination">
-                <el-pagination
-                    background
-                    layout="total, prev, pager, next"
-                    :current-page="query.pageIndex"
-                    :page-size="query.pageSize"
-                    :total="pageTotal"
-                    @current-change="handlePageChange"
-                ></el-pagination>
-            </div>
+        <el-table
+            :data="tableData"
+            border
+            class="table"
+            ref="multipleTable"
+            header-cell-class-name="table-header"
+            @selection-change="handleSelectionChange"
+        >
+            <el-table-column type="selection" width="55" align="center"></el-table-column>
+            <el-table-column prop="id" label="ID" width="55" align="center"></el-table-column>
+            <el-table-column prop="username" label="账号" width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="nickname" label="用户名" width="100" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="phone" label="手机号" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="email" label="邮箱" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="sex" label="性别" align="center">
+                <template slot-scope="scope" >
+                    <el-tag v-if="scope.row.sex==1">男</el-tag>
+                    <el-tag v-else-if="scope.row.sex==0" type="danger">女</el-tag>
+                    <el-tag v-else-if="scope.row.sex==3" type="info">未知</el-tag>
+                </template>
+            </el-table-column>
+            <el-table-column label="头像(查看大图)" align="center">
+                <template slot-scope="scope">
+                    <el-image
+                        class="table-td-thumb"
+                        :src="scope.row.avatar"
+                        :preview-src-list="[scope.row.avatar]"
+                    ></el-image>
+                </template>
+            </el-table-column>
+            <el-table-column label="状态" align="center" prop="userstatus" :formatter="userStatusFormatter"></el-table-column>
+            <el-table-column prop="regtime" label="注册时间" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="updatetime" label="更新时间" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="lastlogintime" label="最后登录时间" width="120" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="words" label="铭言" show-overflow-tooltip></el-table-column>
+            <el-table-column label="操作" width="180" align="center">
+                <template slot-scope="scope">
+                    <el-button
+                        type="text"
+                        icon="el-icon-edit"
+                        @click="handleEdit(scope.$index, scope.row)"
+                    >编辑</el-button>
+                    <el-button
+                        type="text"
+                        icon="el-icon-delete"
+                        class="red"
+                        @click="handleDelete(scope.$index, scope.row)"
+                    >删除</el-button>
+                </template>
+            </el-table-column>
+        </el-table>
+        <div class="pagination">
+            <el-pagination
+                background
+                layout="total, prev, pager, next"
+                :current-page="query.pageNum"
+                :page-size="query.pageSize"
+                :total="pageTotal"
+                @current-change="handlePageChange"
+            ></el-pagination>
         </div>
 
         <!-- 编辑弹出框 -->
@@ -113,16 +110,22 @@
 
 <script>
 //import { fetchData } from '../../api/index';
+import formatters from '../../../utils/formatters'
 export default {
     name: 'user-list',
     data() {
         return {
             query: {
-                address: '',
-                name: '',
+                userstatus:'',
+                sex: '',
+                usernameLikeLeft:'',
+                nicknameLikeLeft:'',
+                phoneLikeLeft:'',
+                emailLikeLeft:'',
                 pageNum: 1,
                 pageSize: 10
             },
+            userStatusData:[],
             tableData: [],
             multipleSelection: [],
             delList: [],
@@ -134,21 +137,40 @@ export default {
         };
     },
     created() {
+        this.initStaticData();
         this.getData(this);
     },
     methods: {
+        initStaticData(){
+            let arr = [];
+            for(var item in formatters.userStatusData){
+                arr.push({code:item,name:formatters.userStatusData[item]});  
+            }
+            this.userStatusData = arr;
+        },
+        userStatusFormatter(row, column, cellValue, index){
+            return formatters.userStatus(cellValue);
+        },
+        userSexFormatter(){
+            return formatters.sex(cellValue);
+        },
+        addUser(){
+            this.editVisible = true;
+        },
         getData(that) {
             that.$ajax.get(that.$config.baseUrl + that.$config.getUserListUri,{
                 params:that.query     
             }).then(function(res){
                 console.log(res);
                 that.tableData = res.data.result.records;
-                that.pageTotal = res.data.result.total || 50;
+                that.pageTotal = res.data.result.total || 0;
+                that.pageNum = res.data.result.current;
             });
 
         },
         // 触发搜索按钮
         handleSearch() {
+            console.log(this.query);
             this.$set(this.query, 'pageNum', 1);
             this.getData(this);
         },
@@ -209,7 +231,7 @@ export default {
 }
 
 .handle-input {
-    width: 300px;
+    width: 120px;
     display: inline-block;
 }
 .table {
